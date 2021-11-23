@@ -4,6 +4,7 @@ import {useState,useEffect} from 'react'
 import Season from './components/season'
 import Search from './components/search'
 import Modal from './components/modal'
+import {useHttp} from './components/http'
 import './styles/theme.css'
 
 
@@ -15,13 +16,22 @@ import './styles/theme.css'
 	const [backState,setBackState] = useState(false)// вернуть начальное состояние (отобразить список всех серий)
 	const [modalShow,setModalShow] = useState(false)// показать или скрыть модальное окно с описанием эпизода
 	
-	// получаем список серий на главную страницу 
- 	useEffect(()=>{
-	fetch('https://rickandmortyapi.com/api/episode/')
-	.then(res=>res.json())
-	.then(result=>setState({loading:true,data:result.results}))
-	setBackState(false)
+    const {request}=useHttp() 	
+	
+	// получаем список серий на главную страницу 	
+	useEffect(async()=>{
+		const data = request('https://rickandmortyapi.com/api/episode/')
+		const result = await data
+	    setState({loading:true,data:result})
+		setBackState(false)
 	},[backState])
+	
+	// получаем список всех персонажей 
+	//useEffect(async()=>{
+	//	const data = request('https://rickandmortyapi.com/api/location/')
+	//	const result = await data
+	//    setHeroes(result)
+	//},[])
 	
 	//поиск по списку серий 
 	function clickFind(){
@@ -37,10 +47,11 @@ import './styles/theme.css'
 
    //получаем список героев выбранного эпизода и показываем его в модальном окне при клике на эпизод
    function epsInfo(characters) {
-     characters.map(item=>fetch(item)
-		.then(res=>res.json())
-		.then(result=>setHeroes(result.name)))	
-	 setModalShow(true)
+ //    characters.map(item=>fetch(item)
+//		.then(res=>res.json())
+//		.then(result=>setHeroes(result.name)))	
+//	 setModalShow(true)
+    console.log(heroes)
    }
    
    // возвращаемся на главную страницу
@@ -65,6 +76,9 @@ import './styles/theme.css'
 	
 	<Season season={'01'} isLoading={state.loading} data={state.data} clickEps={epsInfo} heroes={heroes}/>
 	<Season season={'02'} isLoading={state.loading} data={state.data} clickEps={epsInfo} heroes={heroes}/>
+	<Season season={'03'} isLoading={state.loading} data={state.data} clickEps={epsInfo} heroes={heroes}/>
+	<Season season={'04'} isLoading={state.loading} data={state.data} clickEps={epsInfo} heroes={heroes}/>
+	<Season season={'05'} isLoading={state.loading} data={state.data} clickEps={epsInfo} heroes={heroes}/>
 	
 	<p>{toMain ? <button onClick={backToMain}>To main</button> : ''}</p>
     
