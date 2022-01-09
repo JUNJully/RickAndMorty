@@ -4,7 +4,7 @@ import {useState,useEffect} from 'react'
 import Season from './components/season'
 import Search from './components/search'
 import Modal from './components/modal'
-import {useHttp} from './components/http'
+import request from './components/request'
 import './styles/theme.css'
 
 
@@ -16,7 +16,7 @@ import './styles/theme.css'
 	const [backState,setBackState] = useState(false)// вернуть начальное состояние (отобразить список всех серий)
 	const [modalShow,setModalShow] = useState(false)// показать или скрыть модальное окно с описанием эпизода
 	
-    const {request}=useHttp() 	
+
 	
 	// получаем список серий на главную страницу 	
 	useEffect(async()=>{

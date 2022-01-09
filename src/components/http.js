@@ -1,22 +1,21 @@
-import {useCallback} from 'react'
+//let url = 'https://rickandmortyapi.com/api/episode'
+export default async function* useHttp(url) {
+	let u = url
+	while (u) {
+		const response = await fetch(u)
 
-export const useHttp = () => {
+		const body = await response.json();
 
-	const array=[]
-	
-	const request = useCallback(async (url) => {
-				
-			const response = await fetch(url)
-			const data = await response.json()
-			await data.results.map(item=>array.push(item))
-			if (data.info.next===null) {	
-				return array
-			}
-		
-		return request(data.info.next)
-								
-	},[])
+		let nextPage = body.info.next ? body.info.next.slice(url.length) : null;
 
-	return {request}
+		u = nextPage ? url + nextPage : null;
+
+		for(let commit of body.results) {
+			yield commit;
+		}
+	}
 }
+
+
+
 
